@@ -1,0 +1,44 @@
+{
+  "terraform": {
+    "required_providers": {
+      "docker": {
+        "source": "kreuzwerker/docker",
+        "version": "3.0.2"
+      }
+    }
+  },
+  "provider": {
+    "docker": {
+      "host": "tcp://localhost:2375"
+    }
+  },
+  "resource": {
+    "docker_image": {
+      "httpd": {
+        "name": "httpd:latest"
+      }
+    },
+    "docker_container": {
+      "webserver": {
+        "name": "webserver",
+        "image": "${resource.docker_image.httpd.image_id}",
+        "ports": [
+          {
+            "internal": 80,
+            "external": 88
+          }
+        ]
+      },
+      "webserver_2": {
+        "name": "webserver_2",
+        "image": "${resource.docker_image.httpd.image_id}",
+        "ports": [
+          {
+            "internal": 80,
+            "external": 89
+          }
+        ]
+      }
+    }
+  }
+}

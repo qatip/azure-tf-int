@@ -1,0 +1,14 @@
+{
+    ".123": "application/vnd.lotus-1-2-3",
+    ".3dml": "text/vnd.in3d.3dml",
+    ".3g2": "video/3gpp2",
+    ".3gp": "video/3gpp",
+    ".a": "application/octet-stream",
+    ".aac": "audio/x-aac",
+    ".json": "application/json",
+    ".txt": "text/plain",
+    ".csv": "text/csv",
+    ".jpeg": "image/jpeg",
+    ".jpg": "image/jpeg",
+    ".png": "image/png" 
+}

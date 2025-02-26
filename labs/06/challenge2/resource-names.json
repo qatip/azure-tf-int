@@ -1,0 +1,9 @@
+{
+    "inconsistent_names": [
+        "dev-finance.db01",
+        "infra_prod_appserver",
+        "sales-test_db02",
+        "infra_prod_web01",
+        "test.backup.storage03"
+    ]
+}
