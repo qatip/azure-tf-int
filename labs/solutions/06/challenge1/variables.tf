@@ -1,7 +1,6 @@
 variable "resource_group_name" {
   description = "Name of the resource group (must be RG1 to RG6)"
   type        = string
-  default     = "RG1"
 
   validation {
     condition     = can(regex("^RG[1-6]$", var.resource_group_name))
@@ -12,7 +11,6 @@ variable "resource_group_name" {
 variable "environment" {
   description = "Environment type (must be DEV, PROD, or TEST)"
   type        = string
-  default     = "dev"
 
   validation {
     condition     = contains(["DEV", "PROD", "TEST"], upper(var.environment))

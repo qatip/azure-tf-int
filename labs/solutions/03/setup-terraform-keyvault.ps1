@@ -2,8 +2,8 @@
 # Define Variables
 $resourceGroup = "RG1"
 $location = "West Europe"
-$keyVaultName = "<key_name>"
-$subscriptionId = "<sub_id>"
+$keyVaultName = "<vault name>"
+$subscriptionId = "<subscription id>"
 $spName = "terraform-sp"
 
 # Login to Azure
@@ -21,7 +21,7 @@ az group show --name $resourceGroup --query '{id:id, name:name, location:locatio
 ## STAGE 2 ##
 # Create Key Vault
 Write-Host "Creating Azure Key Vault..."
-az keyvault create --name $keyVaultName --resource-group $resourceGroup --location $location > $null
+az keyvault create --name $keyVaultName --resource-group $resourceGroup --location $location --enable-rbac-authorization false > $null
 
 # Verify Key Vault
 Write-Host "Verifying Azure Key Vault..."

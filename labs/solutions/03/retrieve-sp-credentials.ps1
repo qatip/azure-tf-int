@@ -1,3 +1,5 @@
+## usage - .\retrieve-sp-credentials.ps1 -KeyVaultName "vaultname"
+
 param (
     [string]$KeyVaultName ,
     [string]$OutputFile = "./sp_credentials.env"
@@ -12,14 +14,19 @@ function Get-SecretValue {
 ## Stage 2 ##
 # Connect to Azure account
 Write-Host "Logging in to Azure..."
-Connect-AzAccount
+az login
 
 # Retrieve Service Principal credentials from Key Vault
 Write-Host "Fetching Service Principal credentials from Key Vault..."
-$clientId = Get-SecretValue -KeyVaultName $KeyVaultName -SecretName "Terraform-Client-ID"
-$clientSecret = Get-SecretValue -KeyVaultName $KeyVaultName -SecretName "Terraform-Client-Secret"
-$tenantId = Get-SecretValue -KeyVaultName $KeyVaultName -SecretName "Terraform-Tenant-ID"
-$subscriptionId = Get-SecretValue -KeyVaultName $KeyVaultName -SecretName "Terraform-Subscription-ID"
+$clientId = az keyvault secret show --vault-name $KeyVaultName --name "Terraform-Client-ID" --query value -o tsv
+$clientSecret = az keyvault secret show --vault-name $KeyVaultName --name "Terraform-Client-Secret" --query value -o tsv
+$tenantId = az keyvault secret show --vault-name $KeyVaultName --name "Terraform-Tenant-ID" --query value -o tsv
+$subscriptionId = az keyvault secret show --vault-name $KeyVaultName --name "Terraform-Subscription-ID" --query value -o tsv
+
+#$clientId = Get-SecretValue -KeyVaultName $KeyVaultName -SecretName "Terraform-Client-ID"
+#$clientSecret = Get-SecretValue -KeyVaultName $KeyVaultName -SecretName "Terraform-Client-Secret"
+#$tenantId = Get-SecretValue -KeyVaultName $KeyVaultName -SecretName "Terraform-Tenant-ID"
+#$subscriptionId = Get-SecretValue -KeyVaultName $KeyVaultName -SecretName "Terraform-Subscription-ID"
 
 ## Stage 3 ##
 # Set environment variables for Terraform
