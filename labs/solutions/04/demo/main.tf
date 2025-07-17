@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "azurerm" {
-  subscription_id = "<sub_id>"
+  subscription_id = "316f0ed4-2796-4561-a734-24b156826ae5"
   features {}
 }
 
@@ -42,26 +42,21 @@ resource "azurerm_subnet_network_security_group_association" "nsg_association" {
       id    = subnet_id
       }
     }
-  ]...)
+ ]...)
 
   subnet_id = each.value.id
 
   network_security_group_id = module.nsgs[each.value.vnet].nsg_id
 }
 
+resource "azurerm_virtual_network_peering" "peerings" {
+  for_each = {
+    peer1to2 = { local = "vnet1", remote = "vnet2" }
+    peer2to1 = { local = "vnet2", remote = "vnet1" }
+  }
 
-resource "azurerm_virtual_network_peering" "peer1to2" {
-  name                      = "peer1to2"
+  name                      = each.key
   resource_group_name       = azurerm_resource_group.example.name
-  virtual_network_name      = module.vnets["vnet1"].vnet_details.name
-  remote_virtual_network_id = module.vnets["vnet2"].vnet_details.id
+  virtual_network_name      = module.vnets[each.value.local].vnet_details.name
+  remote_virtual_network_id = module.vnets[each.value.remote].vnet_details.id
 }
-
-resource "azurerm_virtual_network_peering" "peer2to1" {
-  name                      = "peer2to1"
-  resource_group_name       = azurerm_resource_group.example.name
-  virtual_network_name      = module.vnets["vnet2"].vnet_details.name
-  remote_virtual_network_id = module.vnets["vnet1"].vnet_details.id
-}
-
-

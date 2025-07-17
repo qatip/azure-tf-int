@@ -23,10 +23,6 @@ $clientSecret = az keyvault secret show --vault-name $KeyVaultName --name "Terra
 $tenantId = az keyvault secret show --vault-name $KeyVaultName --name "Terraform-Tenant-ID" --query value -o tsv
 $subscriptionId = az keyvault secret show --vault-name $KeyVaultName --name "Terraform-Subscription-ID" --query value -o tsv
 
-#$clientId = Get-SecretValue -KeyVaultName $KeyVaultName -SecretName "Terraform-Client-ID"
-#$clientSecret = Get-SecretValue -KeyVaultName $KeyVaultName -SecretName "Terraform-Client-Secret"
-#$tenantId = Get-SecretValue -KeyVaultName $KeyVaultName -SecretName "Terraform-Tenant-ID"
-#$subscriptionId = Get-SecretValue -KeyVaultName $KeyVaultName -SecretName "Terraform-Subscription-ID"
 
 ## Stage 3 ##
 # Set environment variables for Terraform

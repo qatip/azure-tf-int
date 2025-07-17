@@ -1,6 +1,2 @@
-resource_group_name   = "RG1"
-location              = "West Europe"
-storage_account_name  = "stgvalidaccount"
-vm_name               = "VM1"
-replication_type = "LRS"
-vm_size = "Standard_B2s"
+vm_size = "Standard_B2S"
+storage_account_name = "labstorage<random unique suffix>"

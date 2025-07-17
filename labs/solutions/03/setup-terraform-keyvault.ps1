@@ -2,9 +2,10 @@
 # Define Variables
 $resourceGroup = "RG1"
 $location = "West Europe"
-$keyVaultName = "<vault name>"
-$subscriptionId = "<subscription id>"
+$keyVaultName = "michaelsnewvault1"
+$subscriptionId = "316f0ed4-2796-4561-a734-24b156826ae5"
 $spName = "terraform-sp"
+
 
 # Login to Azure
 Write-Host "Logging into Azure..."
@@ -16,7 +17,9 @@ az group create --name $resourceGroup --location $location > $null
 
 # Verify Resource Group
 Write-Host "Verifying Resource Group..."
-az group show --name $resourceGroup --query '{id:id, name:name, location:location}'
+az group show --name $resourceGroup --query "{id:id, name:name, location:location}"
+az login > $null  # Suppress login output
+
 
 ## STAGE 2 ##
 # Create Key Vault
@@ -54,11 +57,11 @@ az keyvault secret list --vault-name $keyVaultName --query "[].{name:name}" -o t
 
 ## STAGE 4 ##
 # Grant Key Vault Access to the Service Principal
-Write-Host "Granting Key Vault access to the Service Principal..."
+#Write-Host "Granting Key Vault access to the Service Principal..."
 az keyvault set-policy --name $keyVaultName --spn $appId --secret-permissions get list > $null
 
 # Verify Key Vault Access Policy (Masking Output)
-Write-Host "Verifying Key Vault access policy..."
+#Write-Host "Verifying Key Vault access policy..."
 az keyvault show --name $keyVaultName --query "{id:id, name:name, properties:properties.accessPolicies}" > $null
 
 Write-Host "Setup Complete! Terraform service principal secrets are securely stored in Azure Key Vault."
