@@ -60,7 +60,7 @@ resource "azurerm_network_interface" "example" {
 
 ### Step 3: Virtual Machine ###
 resource "azurerm_windows_virtual_machine" "example" {
-  name                  = "sql-server-vm"
+  name                  = "VM1"
   resource_group_name   = azurerm_resource_group.example.name
   location              = azurerm_resource_group.example.location
   size                  = "Standard_B2s"
@@ -134,7 +134,7 @@ resource "azurerm_network_interface_security_group_association" "example" {
 
 ### Step 5: Output the Public IP Address ###
 output "vm_public_ip" {
-  value = azurerm_windows_virtual_machine.example.public_ip_address
+  value = azurerm_public_ip.example.ip_address
 }
 
 

@@ -1,3 +1,8 @@
+resource "azurerm_resource_group" "rg" {
+  name     = "RG1"
+  location = "East US"
+}
+
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = "lab10-aks-cluster"
   location            = azurerm_resource_group.rg.location

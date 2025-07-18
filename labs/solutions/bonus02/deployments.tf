@@ -26,14 +26,14 @@ resource "kubernetes_deployment" "nginx" {
           image = "nginx:latest"
 
          # Add resource requests and limits
-          resources {
-            requests = {
-              cpu = "50m"
-            }
-            limits = {
-              cpu = "60m"
-            }
-          }
+#          resources {
+#            requests = {
+#              cpu = "50m"
+#            }
+#            limits = {
+#              cpu = "60m"
+#            }
+#          }
 
           port {
             container_port = 80
@@ -62,21 +62,21 @@ resource "kubernetes_service" "nginx" {
   }
 }
 
-resource "kubernetes_horizontal_pod_autoscaler" "nginx_hpa" {
-  depends_on = [kubernetes_deployment.nginx]
-
-  metadata {
-    name = "nginx-hpa"
-  }
-
-  spec {
-    max_replicas = 4
-    min_replicas = 2
-    scale_target_ref {
-      api_version = "apps/v1"
-      kind        = "Deployment"
-      name        = kubernetes_deployment.nginx.metadata[0].name
-      }
-    target_cpu_utilization_percentage = 5  # Trigger scaling if CPU exceeds 5% (low for demonstration!)
-  }
-}
+#resource "kubernetes_horizontal_pod_autoscaler" "nginx_hpa" {
+#  depends_on = [kubernetes_deployment.nginx]
+#
+#  metadata {
+#    name = "nginx-hpa"
+#  }
+#
+#  spec {
+#    max_replicas = 4
+#    min_replicas = 2
+#    scale_target_ref {
+#      api_version = "apps/v1"
+#      kind        = "Deployment"
+#      name        = kubernetes_deployment.nginx.metadata[0].name
+#      }
+#    target_cpu_utilization_percentage = 5  # Trigger scaling if CPU exceeds 5% (low for demonstration!)
+#  }
+#}
