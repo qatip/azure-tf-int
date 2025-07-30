@@ -4,6 +4,6 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "RG_demo" {
-  name     = "RG1"
+  name     = "RG2"
   location = "West Europe"
 }
