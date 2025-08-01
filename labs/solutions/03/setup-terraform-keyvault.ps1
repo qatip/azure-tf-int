@@ -2,8 +2,8 @@
 # Define Variables
 $resourceGroup = "RG1"
 $location = "West Europe"
-$keyVaultName = "michaelsnewvault1"
-$subscriptionId = "316f0ed4-2796-4561-a734-24b156826ae5"
+$keyVaultName = "<unique vault name>"
+$subscriptionId = "<sub id>"
 $spName = "terraform-sp"
 
 
