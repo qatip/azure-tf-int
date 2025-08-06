@@ -6,6 +6,7 @@ $keyVaultName = "<your key vault name here>"
 $subscriptionId = "<your subsription id>"
 $spName = "terraform-sp"
 
+
 # Login to Azure
 Write-Host "Logging into Azure..."
 az login > $null  # Suppress login output
