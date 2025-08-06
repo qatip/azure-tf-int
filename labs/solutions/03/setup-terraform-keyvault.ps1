@@ -18,8 +18,6 @@ az group create --name $resourceGroup --location $location > $null
 # Verify Resource Group
 Write-Host "Verifying Resource Group..."
 az group show --name $resourceGroup --query "{id:id, name:name, location:location}"
-az login > $null  # Suppress login output
-
 
 ## STAGE 2 ##
 # Create Key Vault
