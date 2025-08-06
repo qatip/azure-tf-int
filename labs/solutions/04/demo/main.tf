@@ -47,6 +47,10 @@ resource "azurerm_subnet_network_security_group_association" "nsg_association" {
   subnet_id = each.value.id
 
   network_security_group_id = module.nsgs[each.value.vnet].nsg_id
+  depends_on = [
+    module.vnets,
+    module.nsgs
+  ]
 }
 
 resource "azurerm_virtual_network_peering" "peerings" {
