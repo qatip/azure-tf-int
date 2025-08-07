@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "azurerm" {
-  subscription_id = "316f0ed4-2796-4561-a734-24b156826ae5"
+  subscription_id = "<sub id>"
   features {}
 }
 module "vnet" {
@@ -16,4 +16,5 @@ module "vnet" {
   version = "5.0.1"
   vnet_location = "West Europe"
   resource_group_name = "demo-rg"
+
 }
