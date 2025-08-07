@@ -4,7 +4,7 @@ $resourceGroup = "RG1"
 $location = "West Europe"
 $keyVaultName = "<unique vault name>"
 $subscriptionId = "<sub id>"
-$spName = "terraform-sp"
+$spName = "terraform-sp1"
 
 
 # Login to Azure
