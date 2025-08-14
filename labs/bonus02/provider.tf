@@ -8,8 +8,13 @@ terraform {
 }
 
 provider "azurerm" {
-  subscription_id = "<your subscription here>"
+  subscription_id = "<sub id>"
   features {}
+}
+
+resource "azurerm_resource_group" "rg" {
+  name     = "RG1"
+  location = "eastus"
 }
 
 provider "kubernetes" {
@@ -24,4 +29,3 @@ provider "helm" {
     config_path = "~/.kube/config"
   }
 }
-

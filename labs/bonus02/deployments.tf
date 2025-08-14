@@ -26,14 +26,14 @@ resource "kubernetes_deployment" "nginx" {
           image = "nginx:latest"
 
          # Add resource requests and limits
-         # resources {
-         #   requests = {
-         #     cpu = "50m"
-         #   }
-         #   limits = {
-         #     cpu = "60m"
-         #   }
-         # }
+#          resources {
+#            requests = {
+#              cpu = "50m"
+#            }
+#            limits = {
+#              cpu = "60m"
+#            }
+#          }
 
           port {
             container_port = 80
@@ -77,6 +77,6 @@ resource "kubernetes_service" "nginx" {
 #      kind        = "Deployment"
 #      name        = kubernetes_deployment.nginx.metadata[0].name
 #      }
-#    target_cpu_utilization_percentage = 5  # Trigger scaling if CPU exceeds 5% (low for demonstration!)
+#    target_cpu_utilization_percentage = 3  # Trigger scaling if CPU exceeds 3% (low for demonstration!)
 #  }
 #}
