@@ -3,18 +3,34 @@ name: terraform-destroy
 on:
   workflow_dispatch:
     inputs:
+      scope:
+        description: 'Environment to destroy: dev | test | prod | all'
+        required: true
+        default: 'dev'
       confirm:
-        description: 'Type: DESTROY to confirm you want to delete all resources in state'
+        description: 'Type EXACTLY: DESTROY-<scope>  (e.g., DESTROY-dev or DESTROY-ALL)'
         required: true
         default: 'NO'
+
 permissions:
   id-token: write
   contents: read
 
 jobs:
   destroy:
-    if: github.event.inputs.confirm == 'DESTROY'
+    # Guardrails: exact confirm phrase per scope
+    if: |
+      (inputs.scope != 'all' && inputs.confirm == format('DESTROY-{0}', inputs.scope)) ||
+      (inputs.scope == 'all' && inputs.confirm == 'DESTROY-ALL')
     runs-on: ubuntu-latest
+
+    # One job that runs once for a single env, or 3 times when scope=all
+    strategy:
+      matrix:
+        env: ${{ inputs.scope == 'all'
+          && fromJSON('["dev","test","prod"]')
+          || fromJSON(format('["{0}"]', inputs.scope)) }}
+
     env:
       TF_IN_AUTOMATION: true
       ARM_USE_OIDC: true
@@ -25,7 +41,10 @@ jobs:
       STATE_RG: ${{ vars.STATE_RG }}
       STATE_STORAGE: ${{ vars.STATE_STORAGE }}
       STATE_CONTAINER: ${{ vars.STATE_CONTAINER }}
-      STATE_KEY: prod.tfstate
+
+      ENV: ${{ matrix.env }}
+      STATE_KEY: ${{ matrix.env }}.tfstate
+
     steps:
       - uses: actions/checkout@v4
 
@@ -52,5 +71,19 @@ jobs:
       - name: Terraform destroy
         run: |
           terraform destroy -auto-approve \
+            -var-file="${ENV}.tfvars" \
             -var="subscription_id=${ARM_SUBSCRIPTION_ID}" \
-            -var="env=prod"
+            -var="env=${ENV}"
+
+      # Remove the state blob only if destroy succeeded
+      - name: Delete remote state blob
+        if: ${{ success() }}
+        run: |
+          echo "Deleting state blob: ${STATE_CONTAINER}/${STATE_KEY} in account ${STATE_STORAGE}"
+          az storage blob delete \
+            --account-name "${STATE_STORAGE}" \
+            --container-name "${STATE_CONTAINER}" \
+            --name "${STATE_KEY}" \
+            --auth-mode login \
+            --only-show-errors
+            

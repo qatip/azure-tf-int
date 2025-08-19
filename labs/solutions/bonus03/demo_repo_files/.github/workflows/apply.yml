@@ -2,7 +2,7 @@ name: terraform-apply
 
 on:
   push:
-    branches: [ main ]
+    branches: [ dev, test, prod ]
     paths:
       - '**/*.tf'
       - '.github/workflows/**'
@@ -25,7 +25,7 @@ jobs:
       STATE_RG: ${{ vars.STATE_RG }}
       STATE_STORAGE: ${{ vars.STATE_STORAGE }}
       STATE_CONTAINER: ${{ vars.STATE_CONTAINER }}
-      STATE_KEY: prod.tfstate
+      ENV: ${{ github.ref_name }}
 
     steps:
       - uses: actions/checkout@v4
@@ -44,18 +44,11 @@ jobs:
 
       - name: Terraform init (remote state)
         run: |
-          terraform init \
-            -backend-config="resource_group_name=${STATE_RG}" \
-            -backend-config="storage_account_name=${STATE_STORAGE}" \
-            -backend-config="container_name=${STATE_CONTAINER}" \
-            -backend-config="key=${STATE_KEY}"
+          terraform init             -backend-config="resource_group_name=${{ env.STATE_RG }}"             -backend-config="storage_account_name=${{ env.STATE_STORAGE }}"             -backend-config="container_name=${{ env.STATE_CONTAINER }}"             -backend-config="key=${{ env.ENV }}.tfstate"
 
       - name: Terraform plan (idempotent)
         run: |
-          terraform plan \
-            -var="subscription_id=${ARM_SUBSCRIPTION_ID}" \
-            -var="env=prod" \
-            -out="plan.tfplan"
+          terraform plan             -var-file="${{ env.ENV }}.tfvars"             -out="plan.tfplan"
 
       - name: Terraform apply
         run: terraform apply -auto-approve "plan.tfplan"
