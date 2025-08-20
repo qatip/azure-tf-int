@@ -16,7 +16,7 @@ End-to-end setup for Terraform on Azure via GitHub Actions (OIDC)
 $MODE = "multi"
 
 # Azure subscription
-$SUBSCRIPTION_ID = "316f0ed4-2796-4561-a734-24b156826ae5"
+$SUBSCRIPTION_ID = "<sub_id>"
 
 # Remote state backend (set $false to skip RG/Storage/Container creation)
 $CREATE_STATE_BACKEND = $true

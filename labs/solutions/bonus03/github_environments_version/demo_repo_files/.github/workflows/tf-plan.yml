@@ -1,0 +1,59 @@
+name: tf-plan
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        type: choice
+        description: "Environment to plan"
+        options: [dev, test, prod]
+        default: dev
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+
+    # Bind the job to the selected GitHub Environment
+    environment: ${{ inputs.env }}
+
+    # Plain env vars for our own use
+    env:
+      ENV: ${{ inputs.env }}
+      TF_IN_AUTOMATION: true
+      ARM_USE_OIDC: true
+      TF_VAR_environment: ${{ inputs.env }} 
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id:       ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id:       ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform init (per-env state key)
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=${{ vars.STATE_RG }}" \
+            -backend-config="storage_account_name=${{ vars.STATE_STORAGE }}" \
+            -backend-config="container_name=${{ vars.STATE_CONTAINER }}" \
+            -backend-config="key=${ENV}.tfstate"
+
+      - name: Terraform fmt
+        run: terraform fmt -check
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: Terraform plan
+        env:
+          TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        run: terraform plan -var-file="${ENV}.tfvars"
