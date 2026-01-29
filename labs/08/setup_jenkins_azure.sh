@@ -2,20 +2,16 @@
 
 set -e  # Exit if any command fails
 
-JENKINS_VERSION="2.479.3"  # Change this to the version you need
+JENKINS_VERSION="2.541.1"  # Change this to the version you need
 
-echo "Updating system and installing OpenJDK 17..."
-sudo apt-get update && sudo apt-get upgrade -y
-sudo apt-get install -y openjdk-17-jdk
-
-echo "Adding Jenkins repository..."
-sudo apt-get install -y curl gnupg lsb-release
-curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
-echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
-sudo apt-get update
-
-echo "Installing Jenkins version $JENKINS_VERSION..."
-sudo apt-get install -y jenkins=$JENKINS_VERSION
+sudo apt-get update -y
+sudo apt-get upgrade -y
+sudo apt-get install -y fontconfig openjdk-21-jre curl gnupg lsb-release unzip
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key | sudo tee /etc/apt/keyrings/jenkins-keyring.asc > /dev/null
+echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update -y
+sudo apt install -y jenkins=$JENKINS_VERSION
 sudo apt-mark hold jenkins  # Prevent automatic updates
 
 echo "Starting and enabling Jenkins service..."
