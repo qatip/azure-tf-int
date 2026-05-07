@@ -121,4 +121,5 @@ Requests to reuse or licence these training materials should be directed to:
 Michael Coulling-Green  
 Email: mcgreen@qa.com
 
-Please note that this contact address is provi# azure-tf-int
+Please note that this contact address is provided **only for licensing and permissions enquiries**.  
+Technical support for the materials is not provided outside of the associated training course.
