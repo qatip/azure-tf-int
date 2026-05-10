@@ -1,4 +1,4 @@
-resource "kubernetes_deployment" "nginx" {
+resource "kubernetes_deployment_v1" "nginx" {
   depends_on = [azurerm_kubernetes_cluster.aks]
 
   metadata {
@@ -28,10 +28,9 @@ resource "kubernetes_deployment" "nginx" {
          # Add resource requests and limits
 #          resources {
 #            requests = {
-#              cpu = "50m"
 #            }
 #            limits = {
-#              cpu = "60m"
+#              cpu = "900m"
 #            }
 #          }
 
@@ -44,7 +43,7 @@ resource "kubernetes_deployment" "nginx" {
   }
 }
 
-resource "kubernetes_service" "nginx" {
+resource "kubernetes_service_v1" "nginx" {
   depends_on = [azurerm_kubernetes_cluster.aks]
 
   metadata {
@@ -62,21 +61,23 @@ resource "kubernetes_service" "nginx" {
   }
 }
 
-#resource "kubernetes_horizontal_pod_autoscaler" "nginx_hpa" {
-#  depends_on = [kubernetes_deployment.nginx]
-#
-#  metadata {
-#    name = "nginx-hpa"
-#  }
-#
-#  spec {
-#    max_replicas = 4
-#    min_replicas = 2
-#    scale_target_ref {
-#      api_version = "apps/v1"
-#      kind        = "Deployment"
-#      name        = kubernetes_deployment.nginx.metadata[0].name
-#      }
-#    target_cpu_utilization_percentage = 3  # Trigger scaling if CPU exceeds 3% (low for demonstration!)
-#  }
-#}
+/*
+resource "kubernetes_horizontal_pod_autoscaler_v1" "nginx_hpa" {
+  depends_on = [kubernetes_deployment_v1.nginx]
+
+  metadata {
+    name = "nginx-hpa"
+  }
+
+  spec {
+    max_replicas = 3
+    min_replicas = 2
+    scale_target_ref {
+      api_version = "apps/v1"
+      kind        = "Deployment"
+      name        = kubernetes_deployment_v1.nginx.metadata[0].name
+      }
+    target_cpu_utilization_percentage = 50  # Trigger scaling if CPU exceeds 50%
+  }
+}
+*/
