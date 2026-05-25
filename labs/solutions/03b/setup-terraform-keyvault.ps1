@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop"
 
-## SECTION 1 - Define lab variables
+## Stage 1 - Define lab variables
 # Update these values before running the script.
 
 $resourceGroup  = "RG1"
@@ -12,7 +12,7 @@ $spName         = "terraform-sp-<unique suffix>"
 $configFile = Join-Path $PWD.Path "terraform-keyvault-lab.config.json"
 
 
-## SECTION 2 - Define helper functions
+## Stage 2 - Define helper functions
 # These functions keep the script repeatable and easier to troubleshoot.
 
 function Invoke-AzCli {
@@ -61,7 +61,7 @@ function Ensure-RoleAssignment {
 }
 
 
-## SECTION 3 - Authenticate to Azure and select subscription
+## Stage 3 - Authenticate to Azure and select subscription
 # The human user authenticates interactively. Terraform will later use the Service Principal.
 
 Write-Host "Logging into Azure..."
@@ -71,7 +71,7 @@ Write-Host "Selecting subscription..."
 Invoke-AzCli "az account set --subscription `"$subscriptionId`""
 
 
-## SECTION 4 - Create or reuse the resource group
+## Stage 4 - Create or reuse the resource group
 # This uses an idempotent existence check so the script can be safely rerun.
 
 Write-Host "Checking Resource Group..."
@@ -86,7 +86,7 @@ else {
 }
 
 
-## SECTION 5 - Create or reuse the Azure Key Vault
+## Stage 5 - Create or reuse the Azure Key Vault
 # The vault is created in RBAC authorization mode rather than using legacy access policies.
 
 Write-Host "Checking Key Vault..."
@@ -122,7 +122,7 @@ $vaultId = az keyvault show `
     -o tsv
 
 
-## SECTION 6 - Create or reuse the Terraform Service Principal
+## Stage 6 - Create or reuse the Terraform Service Principal
 # If the Service Principal already exists, the script rotates the client secret.
 
 Write-Host "Checking Service Principal..."
@@ -172,7 +172,7 @@ Write-Host "Tenant ID: $(($tenantId -replace '^(.{4}).*(.{4})$', '$1****$2'))"
 Write-Host "Client Secret: [HIDDEN]"
 
 
-## SECTION 7 - Configure Azure RBAC permissions
+## Stage 7 - Configure Azure RBAC permissions
 # The current user can write secrets. The Terraform SP can read secrets.
 
 Write-Host "Granting current lab user permission to write secrets to Key Vault..."
@@ -196,7 +196,7 @@ Write-Host "Waiting for RBAC permissions to propagate..."
 Start-Sleep -Seconds 60
 
 
-## SECTION 8 - Store Terraform credentials as Key Vault secrets
+## Stage 8 - Store Terraform credentials as Key Vault secrets
 # These secrets are overwritten if the script is rerun.
 
 Write-Host "Storing Service Principal credentials in Key Vault..."
@@ -213,7 +213,7 @@ az keyvault secret list `
     -o table
 
 
-## SECTION 9 - Persist lab configuration locally for cleanup
+## Stage 9 - Persist lab configuration locally for cleanup
 # The cleanup script reads this file so students do not need to re-enter names.
 
 $config = [ordered]@{
@@ -231,6 +231,6 @@ $config | ConvertTo-Json | Set-Content -Path $configFile -Encoding UTF8
 Write-Host "Saved lab configuration to: $configFile"
 
 
-## SECTION 10 - Confirm setup completion
+## Stage 10 - Confirm setup completion
 
 Write-Host "Setup Complete! Terraform service principal secrets are stored in Azure Key Vault using Azure RBAC authorization."
