@@ -14,7 +14,7 @@ function Get-SecretValue {
 ## Stage 2 ##
 # Connect to Azure account
 Write-Host "Logging in to Azure..."
-az login
+az login | Out-Null
 
 # Retrieve Service Principal credentials from Key Vault
 Write-Host "Fetching Service Principal credentials from Key Vault..."

@@ -39,7 +39,7 @@ function Invoke-AzCli {
 ## SECTION 3 - Authenticate and select subscription
 
 Write-Host "Logging into Azure..."
-az login --use-device-code | Out-Null
+az login | Out-Null
 
 Write-Host "Selecting subscription..."
 Invoke-AzCli "az account set --subscription `"$subscriptionId`""

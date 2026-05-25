@@ -1,8 +1,8 @@
 # =================== EDIT THESE VALUES ===================
 $SUBSCRIPTION_ID          = ""                        # leave "" to use current az account
-$REPO                     = "qatip/tf-az-ga-envs"        # MANDATORY owner/repo
+$REPO                     = ""        # MANDATORY owner/repo
 $ENVIRONMENTS             = @("dev","test","prod")
-$APP_NAME                 = "gh-oidc-qatip-tf-az-ga-envs" # make it unique per repo
+$APP_NAME                 = "" # make it unique per repo
 $SUBSCRIPTION_ROLES       = @("Contributor")          # initial coarse role at subscription
 
 # Remote state backend
