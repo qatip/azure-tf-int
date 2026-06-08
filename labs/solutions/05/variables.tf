@@ -1,14 +1,13 @@
 variable "vm_size" {
   type    = string
-
+  
   validation {
     condition = contains([
       "Standard_D2s_V3",
-      "Standard_DS2_V2",
       "Standard_B2s",
       "Standard_DS3_v2"
     ], var.vm_size)
-    error_message = "Only the following VM sizes are allowed in this lab: Standard_D2s_V3, Standard_DS2_V2, Standard_B2s, Standard_DS3_v2."
+    error_message = "Only the following VM sizes are allowed in this lab: Standard_D2s_V3, Standard_B2s or Standard_DS3_v2."
   }
 }
 
