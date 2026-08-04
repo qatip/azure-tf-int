@@ -5,7 +5,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "lab_rg" {
   name     = "RG1"
-  location = "West Europe"
+  location = "UK West"
 }
 
 resource "azurerm_virtual_network" "vnet" {
