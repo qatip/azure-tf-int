@@ -10,7 +10,7 @@ terraform {
 
 provider "azurerm" {
   features {}
-  subscription_id = "911e746f-0030-41d8-839c-c3579ec74ee4"
+  subscription_id = "Your subscription ID here"
 }
 
 
@@ -57,7 +57,7 @@ output "resource_groups_example_2" {
 }
 */
 
-#/*
+/*
 # Create multiple Resource Groups using for_each
 resource "azurerm_resource_group" "example3" {
   for_each = var.resource_groups
@@ -72,4 +72,4 @@ output "resource_groups_example_3" {
     rg_name => rg.location
   }
 }
-#*/
+*/
