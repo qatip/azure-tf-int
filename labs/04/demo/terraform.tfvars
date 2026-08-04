@@ -8,7 +8,7 @@ vnets = {
   vnet2 = {
     name          = "vnet-02"
     address_space = ["10.1.0.0/16"]
-    location      = "West Europe"
+    location      = "UK West"
   }
 }
 
