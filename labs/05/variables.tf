@@ -1,6 +1,12 @@
 variable "vm_size" {
   type    = string
-  
+
+
+### Run the following command to verify the SKUs available in a given region (update as needed)
+### Update the condition below to match
+### az vm list-skus --location "UK West" --resource-type virtualMachines --output table
+
+
   validation {
     condition = contains([
       "Standard_D2s_V3",
