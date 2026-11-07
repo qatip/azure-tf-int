@@ -8,12 +8,13 @@ terraform {
 }
 
 provider "azurerm" {
-  subscription_id = "<sub id>"
+  subscription_id = "{sub-id}"
   features {}
 }
+
 module "vnet" {
   source  = "Azure/vnet/azurerm"
-  version = "5.0.1"
+  version = "5.0.0"
   vnet_location = "West Europe"
   resource_group_name = "demo-rg"
 

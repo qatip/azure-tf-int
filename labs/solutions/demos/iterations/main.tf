@@ -10,7 +10,7 @@ terraform {
 
 provider "azurerm" {
   features {}
-  subscription_id = "Your subscription ID here"
+  subscription_id = "{sub-id}"
 }
 
 
@@ -22,7 +22,7 @@ resource "azurerm_resource_group" "example1" {
   location = var.location
 }
 
-output "resource_groups_example_1" {
+output "resource_groups_example1" {
   description = "Resource group names with their locations"
   value = [
     for rg in azurerm_resource_group.example1 : 
@@ -45,7 +45,7 @@ resource "azurerm_resource_group" "example2" {
   location = each.value.location
 }
 
-output "resource_groups_example_2" {
+output "resource_groups_example2" {
   description = "Resource groups created using for_each from lists with index-based keys"
   value = {
     for index_key, rg in azurerm_resource_group.example2 :
@@ -57,7 +57,7 @@ output "resource_groups_example_2" {
 }
 */
 
-/*
+#/*
 # Create multiple Resource Groups using for_each
 resource "azurerm_resource_group" "example3" {
   for_each = var.resource_groups
@@ -66,10 +66,10 @@ resource "azurerm_resource_group" "example3" {
 }
 
 # Outputs
-output "resource_groups_example_3" {
+output "resource_groups_example3" {
   description = "Resource groups created with their locations"
   value = { for rg_name, rg in azurerm_resource_group.example3 :
     rg_name => rg.location
   }
 }
-*/
+#*/
