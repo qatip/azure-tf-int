@@ -2,7 +2,7 @@
 
 ## Terraform Checks and Validations
 
-**Version:** 1.1.0 | **Date:** 09/06/26 | **Author:** mcgreen@qa.com
+**Version:** 1.2.0 | **Date:** 08/11/26 | **Author:** mcgreen@qa.com
 
 ## Contents
 
@@ -40,13 +40,13 @@ This lab introduces Terraform validation mechanisms, including input variable va
 
 1. Review the supplied `variables.tf` file. Two variables are declared:
 
-   - `vm_size`: must be one of the four listed sizes.
+   - `vm_size`: must be one of the three listed sizes.
    - `storage_account_name`: must begin with `lab`.
 
    Both variables have validation rules.
 
-2. Review `terraform.tfvars`. Values for both variables are present. The VM size is one of the four permitted sizes, and the storage account name begins with `lab`.
-3. In `terraform.tfvars`, change the VM size from `Standard_D2s_V3` to `Standard_B4s`:
+2. Review `terraform.tfvars`. Values for both variables are present. The VM size is one of the three permitted sizes, and the storage account name begins with `lab`.
+3. In `terraform.tfvars`, change the VM size from `Standard_B2s_v2` to `Standard_B4s`:
 
    ```hcl
    vm_size = "Standard_B4s"
@@ -59,18 +59,12 @@ This lab introduces Terraform validation mechanisms, including input variable va
    terraform plan
    ```
 
-   The plan should fail with an error indicating an invalid VM size choice. The error begins:
-
-   ```text
-   Error: Invalid value for variable
-   ```
-
-   The message identifies `var.vm_size` as `Standard_B4s` and lists the permitted sizes from the validation rule in `variables.tf`.
+   The plan should fail with an error indicating an invalid VM size choice.
 
 5. In `terraform.tfvars`, reset the VM size to the original permitted value:
 
    ```hcl
-   vm_size = "Standard_D2s_V3"
+   vm_size = "Standard_B2s_v2"
    ```
 
 ## Phase 2. Storage account name validation
@@ -93,13 +87,7 @@ This lab introduces Terraform validation mechanisms, including input variable va
    terraform plan
    ```
 
-   This should fail the input validation check. The source lab shows this error:
-
-   ```text
-   Error: Invalid value for variable
-
-   Storage account name must start with 'lab'.
-   ```
+   This should fail the input validation check with an error indicating an invalid storage account name.
 
 3. Restore the `lab` prefix in the storage account name so that it complies with the validation rule. Planning should now succeed:
 
@@ -108,38 +96,22 @@ This lab introduces Terraform validation mechanisms, including input variable va
    ```
 
 4. Now introduce an error in the naming logic. The initial input will still pass validation, but the resulting storage account name will not meet the rule.
-5. In `main.tf`, navigate to line **66** and change the second occurrence of `lab` to `test`. This generates a storage account name that differs from the original variable value.
+5. In `main.tf`, navigate to line **75** and change the second occurrence of `lab` to `test`. This generates a storage account name that differs from the original variable value.
 6. Run:
 
    ```powershell
    terraform plan
    ```
 
-   This should fail the resource postcondition. The source lab shows:
+   This should fail the resource postcondition with an error indicating an invalid name. The resulting storage account name begins with `test`, so the postcondition fails even though the input variable began with `lab`.
 
-   ```text
-   Error: Resource postcondition failed
-
-   Evaluated storage name does not start with 'lab'.
-   ```
-
-   The error points to the following condition:
-
-   ```hcl
-   condition = can(regex("^lab", self.name))
-   ```
-
-   The evaluated `self.name` begins with `test`, so the postcondition fails even though the input variable began with `lab`.
-
-7. Undo the change to line 66 of `main.tf`.
+7. Undo the change to line 75 of `main.tf`.
 8. Plan and apply to verify that the valid resources deploy successfully:
 
    ```powershell
    terraform plan
-   terraform apply
+   terraform apply --auto-approve
    ```
-
-   Review the proposed changes and type `yes` when prompted.
 
 ## Phase 3. Cleanup
 
