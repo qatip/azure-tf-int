@@ -187,13 +187,6 @@ This lab introduces secure, least-privilege access using Azure service principal
 
 **Congratulations, you have completed this lab.**
 
-## Conversion notes
-
-- Corrected the title spelling from “Service Principles” to “Service Principals”.
-- Restored the missing `$` in `$env:ARM_TENANT_ID` in the second service principal login command.
-- Clarified that `az ad sp show` returns the service principal object ID, rather than the app registration object ID.
-- The source lab's provider-version and registration guidance is retained above; it has not been technically revised as part of this format conversion.
-
 ## Copyright
 
 © 2026 QA Michael Coulling-Green. All rights reserved. These lab materials are provided as part of an authorised training course. Course attendees may reuse these materials for their own personal learning and reference outside of the training session. Unauthorised copying, redistribution, publication, or use of these materials to deliver training is prohibited without prior written permission from the author.
