@@ -30,7 +30,7 @@ In this lab, you will use Terraform to create the following:
 
 ## Teaching Points
 
-This lab focuses on using Terraform to create and manage Azure storage accounts, including creating containers, uploading data, configuring storage management policies, and generating SAS tokens.
+This lab focuses on using Terraform to create and manage Azure storage accounts, including creating containers, uploading data, configuring storage management policies, and generating SAS tokens. 
 
 ## Before you begin
 
