@@ -392,7 +392,7 @@ The flow is:
 
     The logic is:
 
-    - The VNet module's `outputs.tf` exposes values for the VNets it created.
+    - The VNet module's `outputs.tf` exposes values for the VNets it created. 
     - The root `main.tf` uses this information when calling the `nsgs` module, creating an instance for each VNet.
     - `modules\nsg\variables.tf` receives the input values.
     - `modules\nsg\main.tf` deploys NSGs using those variables.
