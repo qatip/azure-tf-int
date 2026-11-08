@@ -386,7 +386,7 @@ The flow is:
 
 ### Network security group provisioning
 
-15. Enable the NSG module block in `demo\main.tf`. The PDF identifies lines **30** and **36** as the comment-marker lines to change; check the surrounding markers so the module block becomes active.
+15. Enable the NSG module block in `demo\main.tf`. Comment lines **30** and **36** to enable this resource block.
 
     Modules do not automatically share their resources with one another. The NSG configuration needs information about VNets created by a separate module. The root module orchestrates this by drawing information from the VNet module and passing it to the NSG module.
 
@@ -422,7 +422,7 @@ The flow is:
 
 ### NSG association provisioning
 
-20. Enable the NSG association resource in `demo\main.tf`. The PDF identifies lines **40** and **60** as the comment-marker lines to change. The resource shown is:
+20. Enable the NSG association resource in `demo\main.tf`. Comment lines **40** and **60** to enable this resource:
 
     ```hcl
     resource "azurerm_subnet_network_security_group_association" "nsg_association" {
@@ -476,7 +476,7 @@ The flow is:
 
 ### Network peering provisioning
 
-24. Enable the peering resource in `demo\main.tf`. The PDF identifies lines **62** and **74** as the comment-marker lines to change. The resource shown is:
+24. Enable the peering resource in `demo\main.tf`. Comment lines **62** and **74** to enable this resource:
 
     ```hcl
     resource "azurerm_virtual_network_peering" "peerings" {
