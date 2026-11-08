@@ -1,11 +1,20 @@
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "4.16.0"
+    }
+  }
+}
+
 provider "azurerm" {
-  subscription_id = "<your subscription id>"
+  subscription_id = "<subscription id>"
   features {}
 }
 
 resource "azurerm_resource_group" "lab_rg" {
   name     = "RG1"
-  location = "UK West"
+  location = "denmarkeast"
 }
 
 resource "azurerm_virtual_network" "vnet" {

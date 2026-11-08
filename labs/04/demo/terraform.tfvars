@@ -2,13 +2,13 @@ vnets = {
   vnet1 = {
     name          = "vnet-01"
     address_space = ["10.0.0.0/16"]
-    location      = "East US"
+    location      = "denmarkeast"
   }
 
   vnet2 = {
     name          = "vnet-02"
     address_space = ["10.1.0.0/16"]
-    location      = "UK West"
+    location      = "westeurope"
   }
 }
 

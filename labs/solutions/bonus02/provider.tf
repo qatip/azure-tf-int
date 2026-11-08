@@ -14,7 +14,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "rg" {
   name     = "RG1"
-  location = "eastus"
+  location = "denmarkeast"
 }
 
 provider "kubernetes" {

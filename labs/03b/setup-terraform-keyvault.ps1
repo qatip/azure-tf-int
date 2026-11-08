@@ -4,7 +4,7 @@ $ErrorActionPreference = "Stop"
 # Update these values before running the script.
 
 $resourceGroup  = "RG1"
-$location       = "UK West"
+$location       = "denmarkeast"
 $keyVaultName   = "<your vault name>"
 $subscriptionId = "<your subscription id>"
 $spName         = "terraform-sp-<unique suffix>"

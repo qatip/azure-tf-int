@@ -8,7 +8,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   default_node_pool {
     name       = "default"
     node_count = 2
-    vm_size    = "standard_D2s_V3"
+    vm_size    = "Standard_B2s_v2"
     upgrade_settings {
       max_surge                     = "10%" 
       drain_timeout_in_minutes      = 0     

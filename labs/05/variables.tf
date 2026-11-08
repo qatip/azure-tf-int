@@ -10,7 +10,7 @@ variable "vm_size" {
   validation {
     condition = contains([
       "Standard_D2s_V3",
-      "Standard_B2s",
+      "Standard_B2s_v2",
       "Standard_DS3_v2"
     ], var.vm_size)
     error_message = "Only the following VM sizes are allowed in this lab: Standard_D2s_V3, Standard_B2s or Standard_DS3_v2."

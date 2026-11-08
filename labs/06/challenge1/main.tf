@@ -14,7 +14,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "rg" {
   name     = <your code here>
-  location = "West Europe"
+  location = "denmarkeast"
 
   tags = {
     Environment = <your code here>

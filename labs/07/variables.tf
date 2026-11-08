@@ -13,7 +13,7 @@ variable "project_name" {
 variable "location" {
   description = "Azure region for resource deployment."
   type        = string
-  default     = "East US"
+  default     = "denmarkeast"
 }
 
 variable "additional_tags" {
