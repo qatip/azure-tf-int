@@ -2,7 +2,7 @@
 
 ## Managing Azure Storage using Terraform
 
-**Version:** 1.1.0 | **Date:** 09/06/26 | **Author:** mcgreen@qa.com
+**Version:** 1.2.0 | **Date:** 08/11/26 | **Author:** mcgreen@qa.com
 
 ## Contents
 
@@ -56,26 +56,26 @@ Try to use this only as a last resort if you are struggling to complete the guid
 
 ## Task 1. Create a resource group
 
-Reference: [Blob Storage resource documentation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_blob).
+Reference: [Resource Group documentation](https://registry.terraform.io/providers/hashicorp/azurerm/4.16.0/docs/resources/resource_group).
 
 ### Try it yourself
 
-1. Populate the **Task1** section of `main.tf` with an Azure provider block and a resource block creating a resource group named **RG1** in **East US**.
+1. Populate the **Task1** section of `main.tf` with an Azure provider configuration using version **4.16.0**, and a resource block creating a resource group named **RG1** in **Denmark East**.
 2. Save, plan, and apply the deployment.
 3. Switch to the Azure Portal to verify the deployment.
 
 ### Step-by-step
 
-1. In the Terraform Registry, select the provider's **Overview** tab and copy the `terraform` and `provider` blocks into the **Task1** section of `main.tf`.
+1. Using the [AzureRM 4.16.0 provider page](https://registry.terraform.io/providers/hashicorp/azurerm/4.16.0), copy the `terraform` and `provider` blocks into the **Task1** section of `main.tf`.
 
-   The provider example shown in the PDF is:
+   Use version **4.16.0** in the provider requirement:
 
    ```hcl
    terraform {
      required_providers {
        azurerm = {
          source  = "hashicorp/azurerm"
-         version = "4.74.0"
+         version = "4.16.0"
        }
      }
    }
@@ -85,27 +85,26 @@ Reference: [Blob Storage resource documentation](https://registry.terraform.io/p
    }
    ```
 
-2. Use your browser's **Back** button to return to the `azurerm_storage_blob` documentation.
-3. Copy the `azurerm_resource_group` example block and paste it below the provider block.
-4. Set the resource group's `name` to `"RG1"`.
-5. Set its `location` to `"East US"`.
-6. Save the changes.
-7. Initialize Terraform:
+2. Using the [Resource Group documentation](https://registry.terraform.io/providers/hashicorp/azurerm/4.16.0/docs/resources/resource_group), copy the `azurerm_resource_group` example block and paste it below the provider block.
+3. Set the resource group's `name` to `"RG1"`.
+4. Set its `location` to `"Denmark East"`.
+5. Save the changes.
+6. Initialize Terraform:
 
    ```powershell
    terraform init
    ```
 
-8. Run a plan:
+7. Run a plan:
 
    ```powershell
    terraform plan
    ```
 
-9. An error is returned because the AzureRM provider block is missing a `features` section.
-10. The `features` section configures provider behaviour for certain resources. See the [Features Block documentation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/features-block) for details.
-11. To accept the default behaviour, add an empty `features {}` block inside the provider block.
-12. Beneath `features`, add your subscription ID. The completed provider block should look like this:
+8. An error is returned because the AzureRM provider block is missing a `features` section.
+9. The `features` section configures provider behaviour for certain resources. See the [Features Block documentation](https://registry.terraform.io/providers/hashicorp/azurerm/4.16.0/docs/guides/features-block) for details.
+10. To accept the default behaviour, add an empty `features {}` block inside the provider block.
+11. Beneath `features`, add your subscription ID. The completed provider block should look like this:
 
     ```hcl
     provider "azurerm" {
@@ -114,25 +113,25 @@ Reference: [Blob Storage resource documentation](https://registry.terraform.io/p
     }
     ```
 
-13. Save the changes.
-14. Run:
+12. Save the changes.
+13. Run:
 
     ```powershell
     terraform plan
     ```
 
-15. Planning should complete successfully.
-16. Apply the configuration and type `yes` when prompted:
+14. Planning should complete successfully.
+15. Apply the configuration and type `yes` when prompted:
 
     ```powershell
     terraform apply
     ```
 
-17. In the Azure Portal, verify that resource group **RG1** exists.
+16. In the Azure Portal, verify that resource group **RG1** exists.
 
 ## Task 2. Add a Blob Storage account and container
 
-Reference: [Blob Storage resource documentation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_blob).
+Reference: [Blob Storage resource documentation](https://registry.terraform.io/providers/hashicorp/azurerm/4.16.0/docs/resources/storage_blob).
 
 ### Try it yourself
 
@@ -145,9 +144,8 @@ Update the **Task2** section of `main.tf` with:
 
 ### Step-by-step
 
-1. Open the linked Terraform Registry documentation.
-2. Copy the `azurerm_storage_account` example resource block into the **Task2** section of `main.tf`.
-3. Update its `name` to `storageacct` followed by your unique identifier:
+1. Using the linked documentation, copy the `azurerm_storage_account` example resource block into the **Task2** section of `main.tf`.
+2. Update its `name` to `storageacct` followed by your unique identifier:
 
    ```hcl
    name = "storageacct<add-a-unique-identifier>"
@@ -155,14 +153,14 @@ Update the **Task2** section of `main.tf` with:
 
    Replace the placeholder with your identifier before running Terraform.
 
-4. Copy the `azurerm_storage_container` example resource block into the **Task2** section.
-5. Set the container name:
+3. Copy the `azurerm_storage_container` example resource block into the **Task2** section.
+4. Set the container name:
 
    ```hcl
    name = "example-container"
    ```
 
-6. Save the changes, then plan and apply:
+5. Save the changes, then plan and apply:
 
    ```powershell
    terraform plan
@@ -171,7 +169,7 @@ Update the **Task2** section of `main.tf` with:
 
    Type `yes` when prompted.
 
-7. Verify the storage account and container in the Azure Portal.
+6. Verify the storage account and container in the Azure Portal.
 
 ## Task 3. Examine the file upload code
 
@@ -318,12 +316,11 @@ Reference: [Storage Management Policy documentation](https://registry.terraform.
 
 ### Step-by-step
 
-1. Open the linked Terraform Registry documentation.
-2. Copy the `azurerm_storage_management_policy` example resource block into the **Task4** section of `main.tf`.
-3. The example contains two rules. Remove the entire `rule2` block.
-4. Apply the policy to all blobs by removing `prefix_match` and `match_blob_index_tag` from the `filters` block.
-5. Focus on base blobs by removing the `snapshot` block.
-6. Save, plan, and apply:
+1. Using the linked documentation, copy the `azurerm_storage_management_policy` example resource block into the **Task4** section of `main.tf`.
+2. The example contains two rules. Remove the entire `rule2` block.
+3. Apply the policy to all blobs by removing `prefix_match` and `match_blob_index_tag` from the `filters` block.
+4. Focus on base blobs by removing the `snapshot` block.
+5. Save, plan, and apply:
 
    ```powershell
    terraform plan
@@ -332,8 +329,8 @@ Reference: [Storage Management Policy documentation](https://registry.terraform.
 
    Type `yes` when prompted.
 
-7. In the Azure Portal, open your storage account's **Lifecycle management** page and verify that the rule exists. Your storage account name will differ from the example.
-8. Open the rule and inspect its **Base blobs** parameters. The PDF illustrates:
+6. In the Azure Portal, open your storage account's **Lifecycle management** page and verify that the rule exists. Your storage account name will differ from the example.
+7. Open the rule and inspect its **Base blobs** parameters. The PDF illustrates:
 
    | Time since last modification | Action |
    | --- | --- |
@@ -343,7 +340,7 @@ Reference: [Storage Management Policy documentation](https://registry.terraform.
 
 ## Task 5. Create an Azure Storage shared access signature token
 
-Reference: [Storage Account SAS data source documentation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/storage_account_sas).
+Reference: [Storage Account SAS data source documentation](https://registry.terraform.io/providers/hashicorp/azurerm/4.16.0/docs/data-sources/storage_account_sas).
 
 ### Try it yourself
 
@@ -361,9 +358,8 @@ Reference: [Storage Account SAS data source documentation](https://registry.terr
 
 ### Step-by-step
 
-1. Open the linked Terraform Registry documentation.
-2. Copy the `azurerm_storage_account_sas` example data block into the **Task5** section of `main.tf`.
-3. Set `connection_string` to your storage account's primary connection string. The source lab illustrates:
+1. Using the linked documentation, copy the `azurerm_storage_account_sas` example data block into the **Task5** section of `main.tf`.
+2. Set `connection_string` to your storage account's primary connection string. The source lab illustrates:
 
    ```hcl
    connection_string = azurerm_storage_account.example.primary_connection_string
@@ -371,20 +367,20 @@ Reference: [Storage Account SAS data source documentation](https://registry.terr
 
    Replace `example` with the actual storage account resource label in your configuration if it differs.
 
-4. Remove the `signed_version` attribute from the copied example.
-5. In `resource_types`, set containers to `true` and the other resource types to `false`.
-6. In `services`, leave blob as the only enabled service.
-7. Change the date portion of `start` to **2026-01-01**.
-8. Change the date portion of `expiry` to **2027-01-01**.
-9. Set read, write, and list permissions to `true`. Set all other permissions to `false`.
-10. Save the changes and run:
+3. Remove the `signed_version` attribute from the copied example.
+4. In `resource_types`, set containers to `true` and the other resource types to `false`.
+5. In `services`, leave blob as the only enabled service.
+6. Change the date portion of `start` to **2026-01-01**.
+7. Change the date portion of `expiry` to **2027-01-01**.
+8. Set read, write, and list permissions to `true`. Set all other permissions to `false`.
+9. Save the changes and run:
 
     ```powershell
     terraform plan
     ```
 
-11. If the supplied output block has not yet been marked sensitive, Terraform should return an error about exposing a sensitive value through an output.
-12. Add `sensitive = true` to the output block:
+10. If the supplied output block has not yet been marked sensitive, Terraform should return an error about exposing a sensitive value through an output.
+11. Add `sensitive = true` to the output block:
 
     ```hcl
     output "sas_url_query_string" {
@@ -395,20 +391,20 @@ Reference: [Storage Account SAS data source documentation](https://registry.terr
 
     This suppresses the token in ordinary plan and apply output while allowing it to be explicitly requested.
 
-13. Save the changes and run:
+12. Save the changes and run:
 
     ```powershell
     terraform plan
     ```
 
-14. Planning should complete successfully.
-15. Apply the changes and type `yes` when prompted:
+13. Planning should complete successfully.
+14. Apply the changes and type `yes` when prompted:
 
     ```powershell
     terraform apply
     ```
 
-16. The SAS token generated by the `azurerm_storage_account_sas` data source is not stored or displayed as a token in the Azure Portal. It is generated on the client side rather than registered as an Azure resource.
+15. The SAS token generated by the `azurerm_storage_account_sas` data source is not stored or displayed as a token in the Azure Portal. It is generated on the client side rather than registered as an Azure resource.
 
 ## Task 6. Use the SAS token
 
