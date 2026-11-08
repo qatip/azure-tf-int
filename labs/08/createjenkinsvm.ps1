@@ -1,9 +1,9 @@
 # Variables
 $ResourceGroupName = "RG1"
-$Location = "westeurope"
+$Location = "denmarkeast"
 $VMName = "VM1"
 $Image = "Ubuntu2404"
-$VMSize = "Standard_D2s_V3"
+$VMSize = "Standard_B2s_v2"
 $AdminUsername = "azureuser"
 #$Tags = @{
 #    environment = "dev"
