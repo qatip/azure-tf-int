@@ -2,7 +2,7 @@
 
 ## Managing Azure Storage using Terraform
 
-**Version:** 1.2.0 | **Date:** 08/11/26 | **Author:** mcgreen@qa.com
+**Version:** 1.2.1 | **Date:** 09/11/26 | **Author:** mcgreen@qa.com
 
 ## Contents
 
@@ -27,6 +27,8 @@ In this lab, you will use Terraform to create the following:
 - Container.
 - Storage management policy.
 - Shared access signature (SAS) token.
+
+Use the SAS token to list the container contents and then view the uploaded `Teide.jpeg` image in a web browser.
 
 ## Teaching Points
 
@@ -318,7 +320,7 @@ The configuration uploads local files as blobs with appropriate metadata:
 1. Review the sample code in the [Storage Account SAS documentation](https://registry.terraform.io/providers/hashicorp/azurerm/4.16.0/docs/data-sources/storage_account_sas).
 2. Create a data block to generate a SAS token with:
 
-   - Container resource types only.
+   - Container and object resource types.
    - Blob service only.
    - Validity for the whole of **2026**.
    - Read, write, and list permissions.
@@ -339,7 +341,17 @@ The configuration uploads local files as blobs with appropriate metadata:
    Use your actual storage account resource label if it differs from `example`.
 
 3. Remove the `signed_version` attribute.
-4. In `resource_types`, set containers to `true` and all other resource types to `false`.
+4. In `resource_types`, enable both container and object access. Leave service access disabled:
+
+   ```hcl
+   resource_types {
+     service   = false
+     container = true
+     object    = true
+   }
+   ```
+
+   Container access supports listing the blobs in a container. Object access, together with read permission, supports opening an individual blob such as `Teide.jpeg`. Both resource types are needed for Task 6. See Microsoft's [account SAS resource types and permissions](https://learn.microsoft.com/en-us/rest/api/storageservices/create-account-sas).
 5. In `services`, leave blob as the only enabled service.
 6. Change the date portion of `start` to **2026-01-01**.
 7. Change the date portion of `expiry` to **2027-01-01**.
@@ -379,19 +391,44 @@ The configuration uploads local files as blobs with appropriate metadata:
 
 ## Task 6. Using the SAS token
 
-1. Display the SAS token:
+You will first use the SAS token to list the container contents, then use the same token to open the uploaded image.
+
+### List the container contents
+
+1. Display the SAS token without surrounding quotation marks:
 
    ```powershell
-   terraform output sas_url_query_string
+   terraform output -raw sas_url_query_string
    ```
 
-2. Construct the following URL on one line, substituting values for your resources. Remove the SAS token's leading `?` and any surrounding quotation marks. Ensure there are no spaces:
+2. Construct the following URL on one line, substituting your storage account and container names. Remove the SAS token's leading `?`, if present, before appending it after `&`. Keep the rest of the token unchanged and ensure there are no spaces:
 
    ```text
    https://<storage-account-name>.blob.core.windows.net/<container-name>?restype=container&comp=list&<sas-token-without-leading-question-mark>
    ```
 
-3. Paste the completed URL into a web browser to view the container's object details using the SAS token.
+3. Paste the completed URL into a web browser. You should see an XML listing of the container's blobs, including `Teide.jpeg`. This request lists object details; it does not display the image.
+
+### View the Teide image
+
+4. Construct a second URL pointing directly to the image. Use your actual storage account and container names, followed by the exact blob name `Teide.jpeg`:
+
+   ```text
+   https://<storage-account-name>.blob.core.windows.net/<container-name>/Teide.jpeg?<sas-token-without-leading-question-mark>
+   ```
+
+   For this URL, omit `restype=container&comp=list`. Append the SAS token directly after a single `?`. Use `Teide.jpeg`, including its exact spelling and case; the supplied file is not named `Teide.jpg`.
+
+5. Paste the completed image URL into a new browser tab. The browser should display the Teide photograph, rather than the XML container listing.
+6. If the image does not display:
+   - Check that Task 3 uploaded `Teide.jpeg` with content type `image/jpeg`.
+   - Check that Task 5 has both `container = true` and `object = true`, with read permission enabled.
+   - If you changed the SAS configuration, run `terraform plan` and `terraform apply`, then retrieve the current token again using `terraform output -raw sas_url_query_string`. Replace the old token in your URLs.
+   - Check the account name, container name and blob name, and copy the complete token without altering its encoded characters.
+
+**Checkpoint:** you can list the container's blobs and view `Teide.jpeg` using the SAS token.
+
+The image URL is a direct [Get Blob request](https://learn.microsoft.com/en-us/rest/api/storageservices/get-blob), authorized by the SAS token. Keep URLs containing the token out of Git and public documents.
 
 ## Task 7. Lab clean-up
 
