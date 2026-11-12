@@ -81,7 +81,6 @@ This lab introduces secure, least-privilege access using Azure service principal
    ```powershell
    terraform init
    terraform plan
-   terraform apply --auto-approve
    ```
 
    > **Resource-provider registration note from the source lab:** This lab uses Azure provider version 4.16, which will automatically register the networking resource provider. If using version >5.0, the source lab instructs you to run the following command if you receive errors about registration of the Azure networking resource provider, then retry the plan and apply:
@@ -90,7 +89,7 @@ This lab introduces secure, least-privilege access using Azure service principal
    az provider register --namespace Microsoft.Network
    ```
 
-2. Expect `terraform apply` to fail with authorization errors.
+2. Expect `terraform plan` to fail with authorization errors.
 
 ## Phase 2. Assign Contributor to the service principal
 
