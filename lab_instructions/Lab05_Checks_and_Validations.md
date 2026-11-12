@@ -46,7 +46,7 @@ This lab introduces Terraform validation mechanisms, including input variable va
    Both variables have validation rules.
 
 2. Review `terraform.tfvars`. Values for both variables are present. The VM size is one of the three permitted sizes, and the storage account name begins with `lab`.
-3. In `terraform.tfvars`, change the VM size from `Standard_D2s_V3` to `Standard_B4s`:
+3. In `terraform.tfvars`, change the VM size  to `Standard_B4s`:
 
    ```hcl
    vm_size = "Standard_B4s"
@@ -64,7 +64,7 @@ This lab introduces Terraform validation mechanisms, including input variable va
 5. In `terraform.tfvars`, reset the VM size to the original permitted value:
 
    ```hcl
-   vm_size = "Standard_D2s_V3"
+   vm_size = "Standard_B2s_v2"
    ```
 
 ## Phase 2. Storage account name validation
