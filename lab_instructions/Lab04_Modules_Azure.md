@@ -160,9 +160,9 @@ Additional virtual networks can be instantiated without modifying the module its
 ### Overview
 
 1. This demonstration explores a more complex use of modules to deploy **virtual networks**, **network security groups (NSGs)**, and **VNet peering**. It highlights dynamic, reusable infrastructure using Terraform modules and outputs.
-2. In your IDE, navigate to `C:\azure-tf-int\labs\04\demo`.
+2. In your IDE, navigate to `C:\azure-tf-int\labs\04demo`.
 3. Review the supplied files.
-4. Update line 2 of `demo\main.tf` with your subscription ID.
+4. Update `04demo\main.tf` with your subscription ID.
 
 ### Understanding the flow logic
 
@@ -176,13 +176,11 @@ module "vnets" {
   address_space       = each.value.address_space
   location            = each.value.location
   resource_group_name = azurerm_resource_group.example.name
-
-  subnets = [for k, v in var.subnets[each.key] : {
-    name           = k
-    address_prefix = v
-  }]
+  subnets = [for k, v in var.subnets[each.key] : { name = k, address_prefix = v }]
+  depends_on          = [time_sleep.rg_propagation]
 }
 ```
+The `depends_on` parameter introduces a delay to allow Azure to propagate the resource groups' existence prior to networking being created in it. 
 
 The expression `for_each = var.vnets` creates a module instance for each entry in `var.vnets`, two in this example. Each instance receives values from its corresponding VNet entry:
 
@@ -191,18 +189,20 @@ vnets = {
   vnet1 = {
     name          = "vnet-01"
     address_space = ["10.0.0.0/16"]
-    location      = "East US"
+    location      = "denmarkeast"
   }
 
   vnet2 = {
     name          = "vnet-02"
     address_space = ["10.1.0.0/16"]
-    location      = "West Europe"
+    location      = "westus2"
   }
 }
 ```
 
-The `vnet1` instance creates a VNet named `vnet-01`, with address range `10.0.0.0/16`, in **East US**.
+The `vnet1` instance creates a VNet named `vnet-01`, with address range `10.0.0.0/16`, in **Denamrk East**.
+
+The `vnet2` instance creates a VNet named `vnet-02`, with address range `10.1.0.0/16`, in **US West 2**.
 
 The `subnets` variable is a nested map. Its outer keys match the VNet keys, while each inner map contains the subnets for that VNet:
 
@@ -223,10 +223,7 @@ subnets = {
 When calling the module, only the subnets belonging to the current VNet are passed down. The following `for` expression converts the selected inner map into a list of objects:
 
 ```hcl
-subnets = [for k, v in var.subnets[each.key] : {
-  name           = k
-  address_prefix = v
-}]
+subnets = [for k, v in var.subnets[each.key] : { name = k , address_prefix = v }]
 ```
 
 - `each.key` is the current VNet key, `vnet1` or `vnet2`, from the module's `for_each` expression.
@@ -319,7 +316,7 @@ The flow is:
 5. Run:
 
    ```powershell
-   cd C:\azure-tf-int\labs\04\demo
+   cd C:\azure-tf-int\labs\04demo
    terraform init
    ```
 
@@ -386,7 +383,7 @@ The flow is:
 
 ### Network security group provisioning
 
-15. Enable the NSG module block in `demo\main.tf`. Comment lines **30** and **36** to enable this resource block.
+15. Enable the NSG module block in `04demo\main.tf`. Comment lines **39** and **47** to enable this resource block.
 
     Modules do not automatically share their resources with one another. The NSG configuration needs information about VNets created by a separate module. The root module orchestrates this by drawing information from the VNet module and passing it to the NSG module.
 
@@ -422,7 +419,7 @@ The flow is:
 
 ### NSG association provisioning
 
-20. Enable the NSG association resource in `demo\main.tf`. Comment lines **40** and **60** to enable this resource:
+20. Enable the NSG association resource in `04demo\main.tf`. Comment lines **49** and **69** to enable this resource:
 
     ```hcl
     resource "azurerm_subnet_network_security_group_association" "nsg_association" {
@@ -476,7 +473,7 @@ The flow is:
 
 ### Network peering provisioning
 
-24. Enable the peering resource in `demo\main.tf`. Comment lines **62** and **74** to enable this resource:
+24. Enable the peering resource in `04demo\main.tf`. Comment lines **71** and **83** to enable this resource:
 
     ```hcl
     resource "azurerm_virtual_network_peering" "peerings" {
@@ -530,7 +527,7 @@ The flow is:
 1. From the demonstration directory, destroy all demonstration resources:
 
    ```powershell
-   cd C:\azure-tf-int\labs\04\demo
+   cd C:\azure-tf-int\labs\04demo
    terraform destroy --auto-approve
    ```
 

@@ -4,11 +4,14 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "4.16.0"
     }
+    time = {
+      source = "hashicorp/time"
+    }
   }
 }
 
 provider "azurerm" {
-  subscription_id = "{your subscription id here}"
+  subscription_id = "{subscription_id}"
   features {}
 }
 
@@ -17,16 +20,23 @@ resource "azurerm_resource_group" "example" {
   location = "denmarkeast"
 }
 
+resource "time_sleep" "rg_propagation" {
+  depends_on      = [azurerm_resource_group.example]
+  create_duration = "30s"
+}
+
 module "vnets" {
-  for_each = var.vnets
+  for_each            = var.vnets
   source              = "./modules/vnet"
   vnet_name           = each.value.name
   address_space       = each.value.address_space
   location            = each.value.location
   resource_group_name = azurerm_resource_group.example.name
   subnets             = [for k, v in var.subnets[each.key] : { name = k, address_prefix = v }]
+  depends_on          = [time_sleep.rg_propagation]
 }
 
+/*
 module "nsgs" {
   for_each = { for k, v in module.vnets : k => v.vnet_details }
   source              = "./modules/nsg"
@@ -34,25 +44,31 @@ module "nsgs" {
   location            = each.value.location
   resource_group_name = azurerm_resource_group.example.name
 }
+*/
 
+/*
 resource "azurerm_subnet_network_security_group_association" "nsg_association" {
   for_each = merge([
-    for k, v in module.vnets : {for subnet_name, subnet_id in v.subnets : subnet_name => {
-      vnet  = k
-      id    = subnet_id
+    for vnet_key, vnet in module.vnets : {
+      for subnet_name, subnet_id in vnet.subnets :
+      "${vnet_key}-${subnet_name}" => {
+        vnet_key  = vnet_key
+        subnet_id = subnet_id
       }
     }
- ]...)
+  ]...)
 
-  subnet_id = each.value.id
+  subnet_id                 = each.value.subnet_id
+  network_security_group_id = module.nsgs[each.value.vnet_key].nsg_id
 
-  network_security_group_id = module.nsgs[each.value.vnet].nsg_id
   depends_on = [
     module.vnets,
     module.nsgs
   ]
 }
+*/
 
+/*
 resource "azurerm_virtual_network_peering" "peerings" {
   for_each = {
     peer1to2 = { local = "vnet1", remote = "vnet2" }
@@ -64,3 +80,4 @@ resource "azurerm_virtual_network_peering" "peerings" {
   virtual_network_name      = module.vnets[each.value.local].vnet_details.name
   remote_virtual_network_id = module.vnets[each.value.remote].vnet_details.id
 }
+*/
