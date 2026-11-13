@@ -57,7 +57,7 @@ output "resource_groups_example2" {
 }
 */
 
-#/*
+/*
 # Create multiple Resource Groups using for_each
 resource "azurerm_resource_group" "example3" {
   for_each = var.resource_groups
@@ -72,4 +72,4 @@ output "resource_groups_example3" {
     rg_name => rg.location
   }
 }
-#*/
+*/
