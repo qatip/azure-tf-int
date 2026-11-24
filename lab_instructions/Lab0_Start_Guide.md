@@ -24,7 +24,7 @@ In this lab, you will:
 
 ## Teaching Points
 
-This lab will set up your lab environment. It should be run at the beginning of each day of the class before attempting any other labs. The lab environment has a time limit of **8 hours 30 minutes**, after which it will be decommissioned. At this point, you will need to restart the lab environment via the QA Portal and run this setup again.
+This lab will set up your lab environment. It should be run at the beginning of each day of the class before attempting any other labs. The lab environment has a time limit of **48 hours**, after which it will be decommissioned. At this point, you will need to restart the lab environment via the QA Portal and run this setup again.
 
 ## Task 1. Accessing the lab environment
 
@@ -36,7 +36,7 @@ This lab will set up your lab environment. It should be run at the beginning of 
 6. Once your desktop is initialized, collapse the sidebar. **Do not click Submit until you no longer need the remote desktop: this terminates the lab session.**
 7. Use **Actions** if you wish to restart or end the lab session.
 
-## Task 2. Installing Class Files
+## Task 2. Verify/Install Class Files
 
 1. In the remote VM, open an **Administrator PowerShell** session.
 2. Enter the following commands:
