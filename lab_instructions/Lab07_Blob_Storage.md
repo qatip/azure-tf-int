@@ -57,6 +57,11 @@ The code is deliberately pinned to **AzureRM 4.16.0**, matching the original lab
 
 Complete Lab 0. You need Windows, VS Code, PowerShell 7 or later, Terraform 1.5 or later (below 2.0), Azure CLI, internet access to the Terraform providers and Azure endpoints, and your assigned Azure subscription.
 
+Install PowerShell 7 if necessary: 
+
+```powershell
+winget install --id Microsoft.PowerShell --source winget.
+```
 Your account needs permission to create resources and retrieve storage account keys. Subscription-level Contributor is sufficient for these operations, subject to Azure Policy and any training restrictions. The subscription must allow Shared Key access for this SAS exercise. The storage public endpoint must be reachable from your workstation; the container itself remains private.
 
 ### 2. Review the files in the course folders
