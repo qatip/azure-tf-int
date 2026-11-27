@@ -22,7 +22,7 @@ resource "azurerm_resource_group" "example" {
 
 resource "time_sleep" "rg_propagation" {
   depends_on      = [azurerm_resource_group.example]
-  create_duration = "30s"
+  create_duration = "60s"
 }
 
 module "vnets" {
